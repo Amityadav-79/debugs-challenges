@@ -1,0 +1,605 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Debugging Competition 2026</title>
+
+<style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background: #101827;
+    color: white;
+    min-height: 100vh;
+    padding: 25px;
+}
+
+header {
+    text-align: center;
+    padding: 20px;
+    margin-bottom: 25px;
+}
+
+header h1 {
+    color: #38bdf8;
+    font-size: 34px;
+}
+
+header p {
+    color: #cbd5e1;
+    margin-top: 10px;
+}
+
+.info {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    flex-wrap: wrap;
+    margin-bottom: 25px;
+}
+
+.info div {
+    background: #1e293b;
+    padding: 15px 25px;
+    border-radius: 10px;
+    text-align: center;
+    min-width: 130px;
+}
+
+.info h3 {
+    color: #38bdf8;
+    margin-bottom: 7px;
+}
+
+.container {
+    max-width: 950px;
+    margin: auto;
+    background: #1e293b;
+    padding: 30px;
+    border-radius: 15px;
+    box-shadow: 0 5px 25px #0005;
+}
+
+.question-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+.tag {
+    background: #0369a1;
+    padding: 9px 16px;
+    border-radius: 20px;
+    font-size: 14px;
+}
+
+.difficulty {
+    color: #facc15;
+}
+
+h2 {
+    margin-bottom: 15px;
+}
+
+.description {
+    color: #cbd5e1;
+    margin-bottom: 20px;
+    line-height: 1.6;
+}
+
+.code-title {
+    margin-bottom: 10px;
+    color: #38bdf8;
+}
+
+pre {
+    background: #080e19;
+    padding: 22px;
+    border-radius: 10px;
+    overflow-x: auto;
+    font-size: 15px;
+    line-height: 1.7;
+    color: #a5f3fc;
+    white-space: pre;
+    margin-bottom: 20px;
+}
+
+.output {
+    background: #334155;
+    padding: 15px;
+    border-radius: 8px;
+    color: #86efac;
+    margin-bottom: 20px;
+}
+
+.buttons {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin-top: 20px;
+}
+
+button {
+    padding: 13px 22px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 15px;
+    font-weight: bold;
+    transition: 0.2s;
+}
+
+button:hover {
+    transform: translateY(-2px);
+    opacity: 0.9;
+}
+
+.next {
+    background: #0284c7;
+    color: white;
+}
+
+.previous {
+    background: #475569;
+    color: white;
+}
+
+.answer {
+    background: #16a34a;
+    color: white;
+}
+
+.timer {
+    color: #facc15;
+    font-size: 25px;
+    font-weight: bold;
+}
+
+.progress {
+    height: 8px;
+    background: #475569;
+    border-radius: 10px;
+    margin-bottom: 25px;
+    overflow: hidden;
+}
+
+.bar {
+    height: 100%;
+    background: #38bdf8;
+    width: 20%;
+    transition: 0.3s;
+}
+
+.answer-box {
+    display: none;
+    background: #064e3b;
+    padding: 20px;
+    border-radius: 10px;
+    margin-top: 20px;
+    line-height: 1.7;
+}
+
+.answer-box pre {
+    margin-top: 12px;
+}
+
+footer {
+    text-align: center;
+    color: #94a3b8;
+    padding: 25px;
+}
+
+.finish {
+    display: none;
+    text-align: center;
+    padding: 50px 15px;
+}
+
+.finish h1 {
+    color: #4ade80;
+    margin-bottom: 20px;
+}
+
+@media(max-width:600px) {
+    body {
+        padding: 10px;
+    }
+
+    .container {
+        padding: 18px;
+    }
+
+    header h1 {
+        font-size: 25px;
+    }
+
+    pre {
+        font-size: 12px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+    <h1>🏆 DEBUG THE CODE</h1>
+    <p>CODING COMPETITION 2026 | 11 NOVEMBER 2026</p>
+</header>
+
+<div class="info">
+    <div>
+        <h3>Students</h3>
+        <p>10 Participants</p>
+    </div>
+
+    <div>
+        <h3>Time Limit</h3>
+        <p>10 Minutes</p>
+    </div>
+
+    <div>
+        <h3>Questions</h3>
+        <p id="total">5 Challenges</p>
+    </div>
+
+    <div>
+        <h3>Timer</h3>
+        <p class="timer" id="timer">10:00</p>
+    </div>
+</div>
+
+<div class="container" id="quiz">
+
+    <div class="question-top">
+        <span class="tag" id="language">PYTHON</span>
+        <span class="difficulty" id="difficulty">EASY</span>
+        <strong id="number">Question 1 / 5</strong>
+    </div>
+
+    <div class="progress">
+        <div class="bar" id="bar"></div>
+    </div>
+
+    <h2 id="title"></h2>
+
+    <p class="description" id="description"></p>
+
+    <h3 class="code-title">🐛 Find and Fix the Bug</h3>
+
+    <pre><code id="code"></code></pre>
+
+    <h3 class="code-title">Expected Output</h3>
+
+    <div class="output">
+        <pre id="output"></pre>
+    </div>
+
+    <div class="answer-box" id="answerBox">
+        <h3>✅ Teacher's Answer Key</h3>
+        <p id="explanation"></p>
+        <pre><code id="solution"></code></pre>
+    </div>
+
+    <div class="buttons">
+        <button class="previous" onclick="previousQuestion()">
+            ← Previous
+        </button>
+
+        <button class="answer" onclick="showAnswer()">
+            👨‍🏫 Reveal Answer
+        </button>
+
+        <button class="next" onclick="nextQuestion()">
+            Next Question →
+        </button>
+    </div>
+
+</div>
+
+<div class="container finish" id="finish">
+    <h1>🎉 Competition Completed!</h1>
+    <h2>Thank You, Participants!</h2>
+    <p>You have completed all 5 debugging challenges.</p>
+    <br>
+    <button class="next" onclick="restart()">
+        Restart Competition
+    </button>
+</div>
+
+<footer>
+    <p>Designed for Coding Competition 2026</p>
+    <p>Think Fast • Debug Smart • Win Big</p>
+</footer>
+
+<script>
+
+const questions = [
+
+{
+language: "PYTHON",
+difficulty: "EASY",
+title: "Find the Largest Number",
+description: "Find the largest among three numbers. Identify and correct all syntax and logical errors.",
+code: `a = 10
+b = 25
+c = 15
+
+if a > b and a > c:
+    print("Largest:", a)
+elif b < a and b < c:
+    print("Largest:", b)
+else
+    print("Largest:", c)`,
+output: "Largest: 25",
+explanation: "Correct the comparison in the elif condition and add the missing colon after else.",
+solution: `a = 10
+b = 25
+c = 15
+
+if a > b and a > c:
+    print("Largest:", a)
+elif b > a and b > c:
+    print("Largest:", b)
+else:
+    print("Largest:", c)`
+},
+
+{
+language: "JAVASCRIPT",
+difficulty: "EASY",
+title: "Reverse a String",
+description: "Reverse the given string using a loop. Find the incorrect starting index.",
+code: `let str = "CODING";
+let rev = "";
+
+for (let i = str.length; i >= 0; i--) {
+    rev = rev + str[i];
+}
+
+console.log("Reverse:", rev);`,
+output: "Reverse: GNIDOC",
+explanation: "String indexing starts at zero. The last character is at str.length - 1.",
+solution: `let str = "CODING";
+let rev = "";
+
+for (let i = str.length - 1; i >= 0; i--) {
+    rev = rev + str[i];
+}
+
+console.log("Reverse:", rev);`
+},
+
+{
+language: "C",
+difficulty: "MEDIUM",
+title: "Sum of Array Elements",
+description: "Calculate the sum of all five elements in the array. Find the loop error.",
+code: `#include <stdio.h>
+
+int main() {
+    int arr[5] = {10, 20, 30, 40, 50};
+    int sum = 0;
+
+    for(int i = 0; i <= 5; i++) {
+        sum = sum + arr[i];
+    }
+
+    printf("Sum = %d", sum);
+
+    return 0;
+}`,
+output: "Sum = 150",
+explanation: "The array has five elements with indexes 0 to 4. Change i <= 5 to i < 5.",
+solution: `#include <stdio.h>
+
+int main() {
+    int arr[5] = {10, 20, 30, 40, 50};
+    int sum = 0;
+
+    for(int i = 0; i < 5; i++) {
+        sum = sum + arr[i];
+    }
+
+    printf("Sum = %d", sum);
+
+    return 0;
+}`
+},
+
+{
+language: "C++",
+difficulty: "MEDIUM",
+title: "Factorial of a Number",
+description: "Calculate the factorial of 5. Find the logical error in the initialization.",
+code: `#include <iostream>
+using namespace std;
+
+int main() {
+    int n = 5;
+    int fact = 0;
+
+    for(int i = 1; i <= n; i++) {
+        fact = fact * i;
+    }
+
+    cout << "Factorial = " << fact;
+
+    return 0;
+}`,
+output: "Factorial = 120",
+explanation: "Factorial multiplication must start with 1, not 0.",
+solution: `#include <iostream>
+using namespace std;
+
+int main() {
+    int n = 5;
+    int fact = 1;
+
+    for(int i = 1; i <= n; i++) {
+        fact = fact * i;
+    }
+
+    cout << "Factorial = " << fact;
+
+    return 0;
+}`
+},
+
+{
+language: "JAVA",
+difficulty: "EASY",
+title: "Check Even or Odd",
+description: "Check whether the given number is even or odd. Find the incorrect operator.",
+code: `class Main {
+    public static void main(String[] args) {
+
+        int num = 7;
+
+        if(num % 2 = 0) {
+            System.out.println("Even");
+        }
+        else {
+            System.out.println("Odd");
+        }
+    }
+}`,
+output: "Odd",
+explanation: "Use == for comparison instead of =, which is the assignment operator.",
+solution: `class Main {
+    public static void main(String[] args) {
+
+        int num = 7;
+
+        if(num % 2 == 0) {
+            System.out.println("Even");
+        }
+        else {
+            System.out.println("Odd");
+        }
+    }
+}`
+}
+
+];
+
+let current = 0;
+let seconds = 600;
+let interval = null;
+
+function loadQuestion() {
+
+    let q = questions[current];
+
+    document.getElementById("language").textContent = q.language;
+    document.getElementById("difficulty").textContent = q.difficulty;
+    document.getElementById("number").textContent =
+        `Question ${current + 1} / ${questions.length}`;
+
+    document.getElementById("title").textContent = q.title;
+    document.getElementById("description").textContent = q.description;
+    document.getElementById("code").textContent = q.code;
+    document.getElementById("output").textContent = q.output;
+
+    document.getElementById("explanation").textContent = q.explanation;
+    document.getElementById("solution").textContent = q.solution;
+
+    document.getElementById("bar").style.width =
+        ((current + 1) / questions.length * 100) + "%";
+
+    document.getElementById("answerBox").style.display = "none";
+
+    document.querySelector(".previous").disabled = current === 0;
+    document.querySelector(".previous").style.opacity =
+        current === 0 ? "0.4" : "1";
+
+    document.querySelector(".next").textContent =
+        current === questions.length - 1
+        ? "Finish Competition 🏆"
+        : "Next Question →";
+}
+
+function nextQuestion() {
+
+    if(current < questions.length - 1) {
+        current++;
+        loadQuestion();
+    } else {
+        document.getElementById("quiz").style.display = "none";
+        document.getElementById("finish").style.display = "block";
+    }
+}
+
+function previousQuestion() {
+    if(current > 0) {
+        current--;
+        loadQuestion();
+    }
+}
+
+function showAnswer() {
+    document.getElementById("answerBox").style.display = "block";
+}
+
+function updateTimer() {
+
+    let min = Math.floor(seconds / 60);
+    let sec = seconds % 60;
+
+    document.getElementById("timer").textContent =
+        String(min).padStart(2, "0") + ":" +
+        String(sec).padStart(2, "0");
+
+    if(seconds <= 60) {
+        document.getElementById("timer").style.color = "#ef4444";
+    }
+
+    if(seconds <= 0) {
+        clearInterval(interval);
+        document.getElementById("timer").textContent = "TIME UP!";
+        document.getElementById("quiz").style.display = "none";
+        document.getElementById("finish").style.display = "block";
+        document.querySelector("#finish h1").textContent = "⏰ Time's Up!";
+        return;
+    }
+
+    seconds--;
+}
+
+function restart() {
+
+    clearInterval(interval);
+
+    current = 0;
+    seconds = 600;
+
+    document.getElementById("quiz").style.display = "block";
+    document.getElementById("finish").style.display = "none";
+    document.getElementById("timer").style.color = "#facc15";
+    document.querySelector("#finish h1").textContent =
+        "🎉 Competition Completed!";
+
+    loadQuestion();
+
+    updateTimer();
+    interval = setInterval(updateTimer, 1000);
+}
+
+loadQuestion();
+updateTimer();
+interval = setInterval(updateTimer, 1000);
+
+</script>
+
+</body>
+</html>
